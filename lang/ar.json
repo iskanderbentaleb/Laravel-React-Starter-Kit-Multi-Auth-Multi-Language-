@@ -1,0 +1,14 @@
+{
+    "The provided two factor authentication code was invalid.": "رمز المصادقة الثنائية المقدم غير صالح.",
+    "The provided two factor recovery code was invalid.": "رمز استرداد المصادقة الثنائية المقدم غير صالح.",
+    "The provided password was incorrect.": "كلمة المرور المقدمة غير صحيحة.",
+    "The password is incorrect.": "كلمة المرور غير صحيحة.",
+    "The :attribute must be at least :length characters.": "يجب أن يكون :attribute على الأقل :length حروف.",
+    "The :attribute must be at least :length characters and contain at least one uppercase character.": "يجب أن يكون :attribute على الأقل :length حروف ويحتوي على حرف كبير واحد على الأقل.",
+    "The :attribute must be at least :length characters and contain at least one number.": "يجب أن يكون :attribute على الأقل :length حروف ويحتوي على رقم واحد على الأقل.",
+    "The :attribute must be at least :length characters and contain at least one special character.": "يجب أن يكون :attribute على الأقل :length حروف ويحتوي على رمز خاص واحد على الأقل.",
+    "The :attribute must be at least :length characters and contain at least one uppercase character and one number.": "يجب أن يكون :attribute على الأقل :length حروف ويحتوي على حرف كبير واحد ورقم واحد على الأقل.",
+    "The :attribute must be at least :length characters and contain at least one uppercase character and one special character.": "يجب أن يكون :attribute على الأقل :length حروف ويحتوي على حرف كبير واحد ورمز خاص واحد على الأقل.",
+    "The :attribute must be at least :length characters and contain at least one uppercase character, one number, and one special character.": "يجب أن يكون :attribute على الأقل :length حروف ويحتوي على حرف كبير ورقم ورمز خاص واحد على الأقل.",
+    "The :attribute must be at least :length characters and contain at least one special character and one number.": "يجب أن يكون :attribute على الأقل :length حروف ويحتوي على رمز خاص واحد ورقم واحد على الأقل."
+}

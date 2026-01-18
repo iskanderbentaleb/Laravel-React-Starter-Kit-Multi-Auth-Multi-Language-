@@ -1,0 +1,14 @@
+{
+    "The provided two factor authentication code was invalid.": "Le code d'authentification à deux facteurs fourni est invalide.",
+    "The provided two factor recovery code was invalid.": "Le code de récupération à deux facteurs fourni est invalide.",
+    "The provided password was incorrect.": "Le mot de passe fourni est incorrect.",
+    "The password is incorrect.": "Le mot de passe est incorrect.",
+    "The :attribute must be at least :length characters.": "Le champ :attribute doit contenir au moins :length caractères.",
+    "The :attribute must be at least :length characters and contain at least one uppercase character.": "Le champ :attribute doit contenir au moins :length caractères et au moins une lettre majuscule.",
+    "The :attribute must be at least :length characters and contain at least one number.": "Le champ :attribute doit contenir au moins :length caractères et au moins un chiffre.",
+    "The :attribute must be at least :length characters and contain at least one special character.": "Le champ :attribute doit contenir au moins :length caractères et au moins un caractère spécial.",
+    "The :attribute must be at least :length characters and contain at least one uppercase character and one number.": "Le champ :attribute doit contenir au moins :length caractères, une lettre majuscule et un chiffre.",
+    "The :attribute must be at least :length characters and contain at least one uppercase character and one special character.": "Le champ :attribute doit contenir au moins :length caractères, une lettre majuscule et un caractère spécial.",
+    "The :attribute must be at least :length characters and contain at least one uppercase character, one number, and one special character.": "Le champ :attribute doit contenir au moins :length caractères, une lettre majuscule, un chiffre et un caractère spécial.",
+    "The :attribute must be at least :length characters and contain at least one special character and one number.": "Le champ :attribute doit contenir au moins :length caractères, un caractère spécial et un chiffre."
+}
