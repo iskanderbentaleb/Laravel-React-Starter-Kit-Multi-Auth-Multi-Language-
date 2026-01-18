@@ -1,123 +1,117 @@
-# Multi-Auth & 2FA Integration Guide
+# 🚀 Laravel & React Starter Kit: Multi-Auth + Multi-Language
 
-This document explains how the project implements multiple user types (User and Admin) and the Two-Factor Authentication (2FA) system using Laravel Fortify and React (Inertia.js).
-
-## 1. Multi-Auth Setup (Users & Admins)
-
-To support separate authentication for regular users and admins, we use distinct guards and providers.
-
-### A. Model & Migration
-1. **Create the Admin Model**:
-   ```bash
-   php artisan make:model Admin -m
-   ```
-2. **Update Admin Model**: Ensure it extends `Authenticatable` and uses `TwoFactorAuthenticatable`.
-   ```php
-   // app/Models/Admin.php
-   use Laravel\Fortify\TwoFactorAuthenticatable;
-   use Illuminate\Foundation\Auth\User as Authenticatable;
-
-   class Admin extends Authenticatable {
-       use TwoFactorAuthenticatable, Notifiable;
-       // ...
-   }
-   ```
-
-### B. Configuration (`config/auth.php`)
-Register the new guard and provider so Laravel knows how to authenticate admins.
-
-```php
-'guards' => [
-    'web' => [
-        'driver' => 'session',
-        'provider' => 'users',
-    ],
-    'admin' => [
-        'driver' => 'session',
-        'provider' => 'admins',
-    ],
-],
-
-'providers' => [
-    'users' => [
-        'driver' => 'eloquent',
-        'model' => App\Models\User::class,
-    ],
-    'admins' => [
-        'driver' => 'eloquent',
-        'model' => App\Models\Admin::class,
-    ],
-],
-
-'passwords' => [
-    'admins' => [
-        'provider' => 'admins',
-        'table' => 'password_reset_tokens',
-        'expire' => 60,
-        'throttle' => 60,
-    ],
-],
-```
-
-### C. Dynamic Guard Middleware
-To make Fortify work with both guards seamlessly, we use a `DynamicGuard` middleware that detects the request path.
-
-```php
-// app/Http/Middleware/DynamicGuard.php
-public function handle(Request $request, Closure $next) {
-    if ($request->is('admin*')) {
-        Config::set('fortify.guard', 'admin');
-        Config::set('fortify.passwords', 'admins');
-        Config::set('auth.defaults.guard', 'admin');
-        auth()->shouldUse('admin');
-    }
-    return $next($request);
-}
-```
-*Registered as global middleware in `bootstrap/app.php`.*
+A professional-grade starter kit built with **Laravel 11**, **React 19 (Inertia.js)**, **Tailwind CSS**, and **Laravel Fortify**. This kit features a robust Multi-Authentication system (User/Admin), 2FA, and a seamless Multi-Language (i18n) implementation.
 
 ---
 
-## 2. Fortify Integration & Customization
+## 🛠️ Step 1: Installation Guide
 
-Fortify is customized in `app/Providers/FortifyServiceProvider.php` to handle dynamic guards.
+Follow these steps to get your project up and running locally.
 
-### A. Dynamic Guard Binding
-We bind `StatefulGuard` to resolve the guard based on the request prefix.
-```php
-$this->app->bind(\Illuminate\Contracts\Auth\StatefulGuard::class, function ($app) {
-    $request = $app->make('request');
-    $isAdmin = $request->is('admin*') || $request->segment(1) === 'admin';
-    return $app['auth']->guard($isAdmin ? 'admin' : 'web');
-});
+### 1. Prerequisites
+- **PHP 8.2+**
+- **Composer**
+- **Node.js & NPM**
+- **MySQL/PostgreSQL**
+
+### 2. Setup Commands
+```bash
+# 1. Clone the repository
+git clone https://github.com/iskanderbentaleb/Laravel-React-Starter-Kit-Multi-Auth-Multi-Language-.git
+cd Laravel-React-Starter-Kit-Multi-Auth-Multi-Language-
+
+# 2. Install Dependencies
+composer install
+npm install
+
+# 3. Environment Configuration
+cp .env.example .env
+php artisan key:generate
+
+# 4. Database Setup
+# (Ensure your DB credentials in .env are correct)
+php artisan migrate --seed
+
+# 5. Start Development Servers
+# Terminal 1:
+php artisan serve
+# Terminal 2:
+npm run dev
 ```
 
-### B. Custom Responses
-We override Fortify's default responses to handle redirects correctly:
-- **`LoginResponse` / `TwoFactorLoginResponse`**: Redirect admins to `/admin/dashboard` and users to `/dashboard`.
-- **`LogoutResponse`**: Redirect admins to `/admin/login`.
-- **`FailedTwoFactorLoginResponse`**: Ensure admins stay on the admin login page if 2FA fails.
+> [!TIP]
+> Use `php artisan db:seed --class=AdminSeeder` if you want to create a default admin user (admin@gmail.com / password).
 
 ---
 
-## 3. Two-Factor Authentication (2FA) Flow
+## 🔐 Step 2: Adding Multi-Auth (Step-by-Step)
 
-The 2FA implementation follows a secure, multi-step process.
+This kit uses **Guards** to separate Admins and Users.
 
-### A. Implementation Flow
-1. **Enable**: User clicks "Enable 2FA". The backend generates a secret and QR code.
-2. **Setup**: The QR code and manual setup key are displayed to the user.
-3. **Verify**: The user scans the QR and enters the 6-digit OTP code to confirm.
-4. **Recovery Codes**: Only *after* successful OTP verification, recovery codes are generated and displayed.
+### Backend Setup (Laravel)
+1. **Model & Migration**: Create a new model (e.g., `Admin`) that extends `Authenticatable` and has a migration similar to the `users` table.
+2. **Auth Config** (`config/auth.php`):
+   - Add a new **Guard** using the `session` driver.
+   - Add a new **Provider** using your new Model.
+   - Add a **Password Reset** broker for the new guard.
+3. **Dynamic Guard Middleware**: 
+   - We created `App\Http\Middleware\DynamicGuard.php`. 
+   - It checks `if ($request->is('admin*'))` and sets `config(['fortify.guard' => 'admin'])`.
+4. **Fortify Customization**:
+   - In `FortifyServiceProvider.php`, we dynamically bind `StatefulGuard` based on the request.
+   - We override `LoginResponse`, `LogoutResponse`, and `TwoFactorLoginResponse` to redirect users based on their guard.
 
-### B. Components
-- **`TwoFactorSetupModal.tsx`**: A multi-step React component that guides the user through Setup -> Verification -> Recovery Codes.
-- **`TwoFactorChallenge.tsx`**: The page where users/admins enter their OTP or recovery code during login.
+### Frontend Setup (React/Inertia)
+1. **Routes**: Define routes in `routes/web.php` inside a `Route::prefix('admin')` group.
+2. **Context**: Use the `auth` prop shared via `HandleInertiaRequests.php` to access the currently logged-in user and their guard.
+3. **Layouts**: Wrap Admin pages in a dedicated `AdminLayout` and User pages in an `AppLayout`.
 
-## 4. Summary of Routes
+---
 
-- **User**: `/login`, `/register`, `/dashboard`, `/settings/two-factor`.
-- **Admin**: `/admin/login`, `/admin/dashboard`, `/admin/settings/two-factor`.
+## 🌍 Step 3: Adding Multi-Language (Step-by-Step)
 
-By using the `admin` prefix and `DynamicGuard`, we keep the logic clean and separate while reusing the powerful features of Laravel Fortify.
-# Laravel-React-Starter-Kit-Multi-Auth-Multi-Language-
+We combine **Laravel's Backend Translations** with **React's i18next**.
+
+### Backend Setup (Laravel)
+1. **Translation Files**: Add folders (e.g., `lang/ar`, `lang/fr`) with `.php` or `.json` files.
+2. **Persistent Locale Middleware**:
+   - We created `App\Http\Middleware\SetLocale.php`.
+   - it reads the `app_locale` cookie and sets `App::setLocale()`.
+   - Register this in `bootstrap/app.php` in the `web` middleware group.
+
+### Frontend Setup (React/i18n)
+1. **i18next Config**: Configure `resources/js/i18n.ts` with your namespaces and languages.
+2. **Language Selector**: 
+   - Create a `LanguageSelector.tsx` component.
+   - It should update both the `i18next` state AND the `app_locale` cookie.
+3. **Usage**: Use the `useTranslation()` hook in your components:
+   ```tsx
+   const { t } = useTranslation();
+   return <h1>{t('welcome_message')}</h1>;
+   ```
+
+---
+
+## 🛡️ Step 4: Security & DDoS Protection
+
+We've implemented professional-grade rate limiting to protect your application.
+
+1. **Guard-Aware Throttling**: Brute-force protection tracks login attempts separately for Admins and Users (`email|ip|guard`).
+2. **Global DDoS Shield**: A global rate limiter in `bootstrap/app.php` prevents automated scripts from overwhelming the server (100 requests/min).
+3. **Smooth UX**: Rate limit errors are caught and returned as validation errors, showing inline messages like "Too many attempts" instead of a 429 error page.
+
+---
+
+## 🚀 Deployment
+Ensure you run:
+```bash
+composer install --optimize-autoloader --no-dev
+npm run build
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+```
+
+---
+
+*Built with ❤️ by Iskander Bentaleb*
