@@ -1,6 +1,6 @@
 # 🚀 Laravel & React Starter Kit: Multi-Auth + Multi-Language
 
-A professional-grade starter kit built with **Laravel 11**, **React 19 (Inertia.js)**, **Tailwind CSS**, and **Laravel Fortify**. This kit features a robust Multi-Authentication system (User/Admin), 2FA, and a seamless Multi-Language (i18n) implementation.
+A professional-grade starter kit built with **Laravel 12**, **React 19 (Inertia.js)**, **Tailwind CSS 4**, and **Laravel Fortify**. This kit features a robust Multi-Authentication system (User/Admin), 2FA, and a seamless Multi-Language (i18n) implementation.
 
 ---
 
