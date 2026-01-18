@@ -95,7 +95,6 @@ We've implemented professional-grade rate limiting to protect your application.
 
 1. **Guard-Aware Throttling**: Brute-force protection tracks login attempts separately for Admins and Users (`email|ip|guard`).
 2. **Global DDoS Shield**: A global rate limiter in `bootstrap/app.php` prevents automated scripts from overwhelming the server (100 requests/min).
-3. **Smooth UX**: Rate limit errors are caught and returned as validation errors, showing inline messages like "Too many attempts" instead of a 429 error page.
 
 ---
 
