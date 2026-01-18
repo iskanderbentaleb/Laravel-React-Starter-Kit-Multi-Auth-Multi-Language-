@@ -33,10 +33,7 @@ php artisan key:generate
 php artisan migrate --seed
 
 # 5. Start Development Servers
-# Terminal 1:
-php artisan serve
-# Terminal 2:
-npm run dev
+composer run dev
 ```
 
 > [!TIP]
